@@ -22,36 +22,42 @@
 <style>
 :root{
   color-scheme:light;
-  --accent:#0FA3B1;--accent-2:#0B7E8A;--accent-3:#14B8C4;--teal-deep:#0E7C86;
-  --coral:#FF7A45;--coral-2:#F0591F;
-  --grad:linear-gradient(135deg,#16C0CC 0%,#0E7C86 100%);
-  --grad-soft:linear-gradient(135deg,#1AD0DC 0%,#0E7C86 60%,#0B6470 100%);
-  --grad-coral:linear-gradient(135deg,#FFA877 0%,#FF7A45 45%,#F0591F 100%);
-  --grad-gold:linear-gradient(135deg,#FFE08A 0%,#F5B739 50%,#E08F12 100%);
-  --grad-club:linear-gradient(135deg,#0E7C86 0%,#10545C 48%,#0B3A40 100%);
-  --verde:#16A66B;--rosa:#FF5D8F;--amarelo:#E0930B;--roxo:#7C5CFF;
-  --bg:#F4F5F7;--surface:#FFFFFF;--surface-2:#F0F2F5;--surface-3:#E9ECF0;
-  --text:#16181C;--muted:#6A6F77;--faint:#9AA0A8;
-  --border:rgba(0,0,0,.08);--hair:rgba(0,0,0,.055);
-  --shadow:0 18px 50px -16px rgba(20,40,50,.20),0 3px 10px -3px rgba(20,40,50,.07);
-  --shadow-sm:0 6px 22px -8px rgba(20,40,50,.14),0 1px 3px rgba(20,40,50,.04);
-  --shadow-xs:0 2px 8px -3px rgba(20,40,50,.10);
-  --page:#E7EAEE;
-  --glass:rgba(255,255,255,.74);
+  --accent:#0ABFCF;--accent-2:#0899A8;--accent-3:#22D4E5;--teal-deep:#076A77;
+  --coral:#FF5133;--coral-2:#D93A1A;
+  --grad:linear-gradient(135deg,#12D4E5 0%,#0899A8 100%);
+  --grad-soft:linear-gradient(155deg,#061824 0%,#0A2D42 55%,#0E4460 100%);
+  --grad-coral:linear-gradient(135deg,#FF8060 0%,#FF5133 50%,#D93A1A 100%);
+  --grad-gold:linear-gradient(135deg,#FFE699 0%,#F5B739 50%,#D9950A 100%);
+  --grad-club:linear-gradient(145deg,#061422 0%,#0A2438 48%,#0D3652 100%);
+  --verde:#00B876;--rosa:#FF4D8B;--amarelo:#F5A623;--roxo:#7C5CFF;
+  --bg:#F2F5FA;--surface:#FFFFFF;--surface-2:#EBF0F8;--surface-3:#DEE5F0;
+  --text:#0B0F1A;--muted:#5C6578;--faint:#9BA5B8;
+  --border:rgba(10,20,50,.07);--hair:rgba(10,20,50,.05);
+  --shadow:0 20px 60px -18px rgba(10,30,60,.20),0 4px 14px -4px rgba(10,30,60,.08);
+  --shadow-sm:0 8px 28px -10px rgba(10,30,60,.14),0 2px 6px -2px rgba(10,30,60,.05);
+  --shadow-xs:0 3px 12px -4px rgba(10,30,60,.10);
+  --page:#E2E7F0;
+  --glass:rgba(255,255,255,.82);
   --star:#F5B739;
   --spring:cubic-bezier(.2,.9,.25,1.08);
   --ease:cubic-bezier(.2,.8,.2,1);
 }
 [data-theme="dark"]{
   color-scheme:dark;
-  --bg:#0A0A0C;--surface:#161618;--surface-2:#222225;--surface-3:#2C2C30;
-  --text:#F5F5F7;--muted:#A1A1A6;--faint:#6E7077;
-  --border:rgba(255,255,255,.12);--hair:rgba(255,255,255,.07);
-  --shadow:0 28px 70px -22px rgba(0,0,0,.78),0 4px 14px -6px rgba(0,0,0,.5);
-  --shadow-sm:0 14px 36px -16px rgba(0,0,0,.62);
-  --shadow-xs:0 4px 14px -6px rgba(0,0,0,.5);
-  --page:#000000;
-  --glass:rgba(22,22,24,.76);
+  --accent:#00E5F5;--accent-2:#00B8C8;--accent-3:#40EEFF;--teal-deep:#007A88;
+  --coral:#FF6040;--coral-2:#E03A20;
+  --grad:linear-gradient(135deg,#00E5F5,#00B8C8);
+  --grad-soft:linear-gradient(155deg,#030C14 0%,#061828 55%,#092238 100%);
+  --grad-club:linear-gradient(145deg,#030C14 0%,#061828 48%,#092238 100%);
+  --bg:#080D16;--surface:#0E1520;--surface-2:#16202E;--surface-3:#1E2C3D;
+  --text:#EAF0FA;--muted:#7A8899;--faint:#3E4E62;
+  --border:rgba(255,255,255,.09);--hair:rgba(255,255,255,.055);
+  --shadow:0 30px 80px -24px rgba(0,0,0,.90),0 6px 20px -8px rgba(0,0,0,.60);
+  --shadow-sm:0 16px 44px -18px rgba(0,0,0,.75);
+  --shadow-xs:0 6px 18px -8px rgba(0,0,0,.60);
+  --page:#040810;
+  --glass:rgba(14,21,32,.88);
+  --verde:#00D490;--rosa:#FF4D8B;--amarelo:#F5B739;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{-webkit-text-size-adjust:100%}
@@ -78,42 +84,42 @@ h1,h2,h3,h4{letter-spacing:-.025em;font-weight:700;line-height:1.16}
 
 /* ===== APPBAR ===== */
 .appbar{
-  background:var(--grad-soft);color:#fff;
-  padding:calc(env(safe-area-inset-top) + 20px) 20px 24px;
-  position:relative;z-index:20;overflow:hidden;
-  box-shadow:0 12px 40px -16px rgba(11,126,138,.6);
-  flex:none;
+  background:
+    radial-gradient(ellipse 70% 130% at -5% 0%,rgba(0,225,240,.26) 0%,transparent 60%),
+    radial-gradient(ellipse 55% 90% at 110% 110%,rgba(255,80,50,.18) 0%,transparent 60%),
+    linear-gradient(155deg,#050F1C 0%,#09243A 55%,#0C3554 100%);
+  color:#fff;
+  padding:calc(env(safe-area-inset-top) + 16px) 20px 20px;
+  position:relative;z-index:20;overflow:hidden;flex:none;
+  box-shadow:0 14px 50px -16px rgba(2,8,20,.65);
 }
 .appbar::before{
-  content:"";position:absolute;top:-80px;left:-40px;width:260px;height:260px;border-radius:50%;
-  background:radial-gradient(circle,rgba(255,255,255,.14),transparent 65%);pointer-events:none;
+  content:"";position:absolute;top:-40px;left:25%;width:300px;height:180px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,230,250,.10),transparent 65%);pointer-events:none;
 }
-.appbar::after{
-  content:"";position:absolute;bottom:-60px;right:-40px;width:200px;height:200px;border-radius:50%;
-  background:radial-gradient(circle,rgba(255,255,255,.10),transparent 65%);pointer-events:none;
-}
+.appbar::after{content:none}
 .appbar .top{display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative;z-index:1}
-.appbar .hi{font-size:.82rem;opacity:.94;font-weight:500;display:flex;align-items:center;gap:5px;letter-spacing:-.01em}
-.appbar .hi .msi{font-size:17px;color:#FFE08A}
-.appbar h2{font-size:1.5rem;margin-top:3px;color:#fff;letter-spacing:-.035em;font-weight:800}
-.appbar .acts{display:flex;gap:10px;align-items:center}
+.appbar .hi{font-size:.7rem;opacity:.6;font-weight:700;display:flex;align-items:center;gap:5px;letter-spacing:.07em;text-transform:uppercase}
+.appbar .hi .msi{font-size:14px;color:#FFE08A;opacity:1}
+.appbar h2{font-size:1.58rem;margin-top:2px;color:#fff;letter-spacing:-.04em;font-weight:800;line-height:1.1}
+.appbar .acts{display:flex;gap:8px;align-items:center}
 .tg{
-  width:42px;height:42px;min-width:42px;border-radius:50%;
-  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.18);
+  width:40px;height:40px;min-width:40px;border-radius:14px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.14);
   color:#fff;cursor:pointer;display:grid;place-items:center;
-  backdrop-filter:blur(8px) saturate(1.4);-webkit-backdrop-filter:blur(8px) saturate(1.4);
+  backdrop-filter:blur(12px) saturate(1.6);-webkit-backdrop-filter:blur(12px) saturate(1.6);
   transition:transform .22s var(--spring),background .2s;
 }
-.tg:active{transform:scale(.88)}
-.tg .msi{font-size:21px}
+.tg:active{transform:scale(.86)}
+.tg .msi{font-size:20px}
 .av{
-  width:44px;height:44px;border-radius:50%;cursor:pointer;
-  background:linear-gradient(135deg,#FFB088,#F0591F);border:2px solid rgba(255,255,255,.5);
-  display:grid;place-items:center;box-shadow:0 6px 16px -6px rgba(240,89,31,.6);
+  width:40px;height:40px;border-radius:14px;cursor:pointer;
+  background:linear-gradient(135deg,#FF8060,#FF5133);border:1.5px solid rgba(255,255,255,.3);
+  display:grid;place-items:center;box-shadow:0 6px 18px -6px rgba(255,81,51,.55);
   transition:transform .22s var(--spring);
 }
-.av:active{transform:scale(.9)}
-.av .msi{font-size:23px;color:#fff}
+.av:active{transform:scale(.88)}
+.av .msi{font-size:22px;color:#fff}
 
 /* CARTÃO CLUBE (premium) */
 .clube{
@@ -148,7 +154,7 @@ h1,h2,h3,h4{letter-spacing:-.025em;font-weight:700;line-height:1.16}
 }
 
 /* ===== SCROLL / PAGES ===== */
-.scroll{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:20px 16px calc(env(safe-area-inset-bottom) + 104px);-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.scroll{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:20px 16px calc(env(safe-area-inset-bottom) + 118px);-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 .scroll::-webkit-scrollbar{display:none}
 .page{display:none}
 .page.on{display:block;animation:fade .42s var(--spring)}
@@ -219,7 +225,7 @@ h1,h2,h3,h4{letter-spacing:-.025em;font-weight:700;line-height:1.16}
 .promo .emo .msi{font-size:104px}
 
 /* ===== CARDS / COMPROMISSO ===== */
-.card{background:var(--surface);border:1px solid var(--hair);border-radius:22px;padding:16px;box-shadow:var(--shadow-sm);margin-bottom:12px}
+.card{background:var(--surface);border:1px solid var(--hair);border-radius:24px;padding:18px;box-shadow:var(--shadow-sm);margin-bottom:12px}
 .appt{position:relative;overflow:hidden}
 .appt .head{display:flex;gap:13px;align-items:center}
 .appt .ic{width:52px;height:52px;border-radius:16px;background:var(--grad);display:grid;place-items:center;flex:none;box-shadow:0 8px 18px -8px rgba(11,126,138,.5)}
@@ -427,27 +433,30 @@ h1,h2,h3,h4{letter-spacing:-.025em;font-weight:700;line-height:1.16}
 
 /* ===== TABBAR (iOS glass) ===== */
 .tabbar{
-  position:absolute;bottom:0;left:0;right:0;
+  position:absolute;
+  bottom:calc(env(safe-area-inset-bottom) + 10px);
+  left:14px;right:14px;
   background:var(--glass);
-  backdrop-filter:blur(32px) saturate(2);-webkit-backdrop-filter:blur(32px) saturate(2);
-  display:flex;justify-content:space-around;align-items:center;
-  padding:6px 4px calc(env(safe-area-inset-bottom) + 6px);
-  border-top:1px solid var(--hair);z-index:25;
+  backdrop-filter:blur(40px) saturate(2.5);-webkit-backdrop-filter:blur(40px) saturate(2.5);
+  border-radius:26px;
+  border:1px solid var(--hair);
+  box-shadow:0 20px 60px -12px rgba(0,0,0,.28),0 4px 16px -4px rgba(0,0,0,.14);
+  display:flex;padding:5px;z-index:25;
 }
 .tab{
   flex:1;text-align:center;color:var(--faint);cursor:pointer;position:relative;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
-  transition:color .2s;padding:4px 2px;
+  transition:color .22s;padding:6px 2px 5px;border-radius:20px;
 }
 .tab .e{
-  width:48px;height:32px;display:flex;align-items:center;justify-content:center;
-  border-radius:14px;transition:background .22s var(--ease),transform .2s var(--spring);
+  width:44px;height:30px;display:flex;align-items:center;justify-content:center;
+  border-radius:12px;transition:background .22s var(--ease),transform .22s var(--spring);
 }
-.tab .e .msi{font-size:24px;transition:transform .3s cubic-bezier(.2,1.5,.5,1),font-variation-settings .2s}
-.tab span{display:block;font-size:.64rem;font-weight:700;letter-spacing:-.01em;transition:color .2s}
+.tab .e .msi{font-size:23px;transition:transform .28s cubic-bezier(.2,1.5,.5,1),font-variation-settings .22s}
+.tab span{display:block;font-size:.62rem;font-weight:700;letter-spacing:-.005em;transition:color .22s}
 .tab.on{color:var(--accent-2)}
-.tab.on .e{background:color-mix(in srgb,var(--accent-2) 14%,transparent)}
-.tab.on .e .msi{transform:scale(1.1);font-variation-settings:'FILL' 1,'wght' 600}
+.tab.on .e{background:color-mix(in srgb,var(--accent-2) 15%,transparent)}
+.tab.on .e .msi{transform:scale(1.12);font-variation-settings:'FILL' 1,'wght' 600}
 .badge{
   position:absolute;top:0;right:50%;transform:translateX(20px);
   background:var(--grad-coral);color:#fff;font-size:.62rem;font-weight:800;
@@ -972,8 +981,11 @@ button:focus-visible,[onclick]:focus-visible,.tab:focus-visible{outline:2.5px so
   overscroll-behavior:none;
 }
 .auth-hero{
-  background:var(--grad-soft);
-  padding:calc(env(safe-area-inset-top)+56px) 24px 40px;
+  background:
+    radial-gradient(ellipse 80% 120% at -5% 10%,rgba(0,225,240,.28) 0%,transparent 55%),
+    radial-gradient(ellipse 60% 80% at 110% 90%,rgba(255,80,50,.18) 0%,transparent 55%),
+    linear-gradient(155deg,#050F1C 0%,#09243A 55%,#0C3554 100%);
+  padding:calc(env(safe-area-inset-top)+52px) 24px 36px;
   text-align:center;position:relative;overflow:hidden;flex:none;
 }
 .auth-hero::before{
@@ -1271,51 +1283,20 @@ function load(){try{const r=localStorage.getItem(KEY);if(r)return JSON.parse(r)}
 
 function seed(){
   return {
-    v:1,
-    profile:{name:'Mariana Souza',first:'Mariana',email:'perdibitcoin@gmail.com',phone:'(11) 98876-5432',since:2023},
-    pets:[
-      {id:'p_thor',name:'Thor',species:'Cão',breed:'Golden Retriever',size:'Grande',birth:'2022-07-10',weight:28,emoji:'🐕'},
-      {id:'p_mel',name:'Mel',species:'Gato',breed:'SRD',size:'Pequeno',birth:'2021-03-22',weight:4.2,emoji:'🐈'}
-    ],
-    addresses:[
-      {id:'a1',label:'Casa',street:'Rua das Acácias',num:'128',comp:'Casa 2',hood:'Jardim Varginha',cep:'04930-120',def:true},
-      {id:'a2',label:'Trabalho',street:'Av. Sadamu Inoue',num:'5200',comp:'Sala 14',hood:'Jardim Varginha',cep:'04930-000',def:false}
-    ],
-    payments:[
-      {id:'pm1',type:'pix',label:'Pix',detail:'Chave: perdibitcoin@gmail.com',def:true},
-      {id:'pm2',type:'card',brand:'Visa',last4:'4218',label:'Visa crédito',def:false},
-      {id:'pm3',type:'card',brand:'Mastercard',last4:'7790',label:'Master débito',def:false},
-      {id:'pm4',type:'cash',label:'Dinheiro na entrega',detail:'Pagar ao receber',def:false}
-    ],
-    orders:[
-      {id:'o1003',type:'compra',date:'2026-06-02',status:'entregue',addr:'Casa',pay:'Pix',pts:238,items:[{n:'Ração Golden Adulto 15kg',p:189.90,q:1},{n:'Petisco Dental',p:19.90,q:2}],subtotal:229.70,frete:0,desc:11.49,total:218.21},
-      {id:'o1001',type:'servico',date:'2026-05-18',status:'concluído',addr:'Casa',pay:'Visa •4218',pts:90,items:[{n:'Banho & Tosa completo — Thor',p:90,q:1}],subtotal:90,frete:0,desc:0,total:90},
-      {id:'o0998',type:'compra',date:'2026-04-29',status:'entregue',addr:'Casa',pay:'Pix',pts:165,items:[{n:'Antipulgas Bravecto',p:165,q:1}],subtotal:165,frete:0,desc:8.25,total:156.75},
-      {id:'o0991',type:'servico',date:'2026-03-11',status:'concluído',addr:'Trabalho',pay:'Master •7790',pts:120,items:[{n:'Consulta Veterinária — Mel',p:120,q:1}],subtotal:120,frete:0,desc:0,total:120}
-    ],
-    appointments:[
-      {id:'ag1',serv:'Banho & Tosa',petId:'p_thor',price:90,date:todayISO(),time:'15:00',pro:'Bia',status:'confirmado',levaTraz:true}
-    ],
-    vaccines:{
-      p_thor:[
-        {id:'v1',name:'V10 (Déctupla)',type:'Vacina',applied:'2025-06-20',next:addDaysISO(todayISO(),12),vet:'Dr. Renato Lima'},
-        {id:'v2',name:'Antirrábica',type:'Vacina',applied:'2025-08-15',next:'2026-08-15',vet:'Dr. Renato Lima'},
-        {id:'v3',name:'Giárdia',type:'Vacina',applied:'2025-09-01',next:'2026-09-01',vet:'Dra. Paula Reis'},
-        {id:'v4',name:'Vermífugo (Drontal)',type:'Vermífugo',applied:'2026-04-01',next:addDaysISO(todayISO(),-5),vet:'Dr. Renato Lima'}
-      ],
-      p_mel:[
-        {id:'v5',name:'Quádrupla Felina',type:'Vacina',applied:'2025-10-10',next:'2026-10-10',vet:'Dra. Paula Reis'},
-        {id:'v6',name:'Antirrábica',type:'Vacina',applied:'2025-10-10',next:'2026-10-10',vet:'Dra. Paula Reis'}
-      ]
-    },
-    points:320,
-    redemptions:[
-      {id:'r1',name:'10% OFF na loja',cost:150,date:'2026-05-20',code:'CLUBE10-7F2A',used:false}
-    ],
+    v:2,
+    profile:{name:'',first:'',email:'',phone:'',since:new Date().getFullYear(),_fromAuth:false},
+    pets:[],
+    addresses:[],
+    payments:[],
+    orders:[],
+    appointments:[],
+    vaccines:{},
+    points:0,
+    redemptions:[],
     cart:[]
   };
 }
-function initState(){const l=load();state=l&&l.v===1?l:seed();if(!l)save();}
+function initState(){const l=load();state=(l&&l.v===2)?l:seed();if(!l||l.v!==2)save();}
 
 /* ============ POINTS / LEVELS ============ */
 const LEVELS=[{n:'Bronze',min:0},{n:'Prata',min:200},{n:'Ouro',min:500}];
@@ -2380,15 +2361,20 @@ function showAuth(){
   // Aguarda o estado inicial do Firebase (já disparado pelo petnexus-auth.js)
   A.onUser(function(user){
     if(user){
-      // Se tiver nome do Firebase, atualiza o perfil local
-      if(user.displayName&&!state.profile._fromAuth){
+      // Sincroniza nome e email do Firebase com o perfil local
+      let changed=false;
+      if(user.displayName&&user.displayName!==state.profile.name){
         state.profile.name=user.displayName;
         state.profile.first=user.displayName.split(' ')[0];
-        state.profile._fromAuth=true;save();
+        state.profile._fromAuth=true;changed=true;
       }
+      if(user.email&&!state.profile.email){
+        state.profile.email=user.email;changed=true;
+      }
+      if(changed)save();
       showApp();
+      renderAll();
     }else{
-      // Verifica demo mode
       let demo=false;try{demo=localStorage.getItem(AUTH_DEMO_KEY)==='1';}catch(_){}
       if(demo){_authDemoMode=true;showApp();}else{showAuth();}
     }
