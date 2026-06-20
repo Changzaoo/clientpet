@@ -13,6 +13,12 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="petnexus-config.js"></script>
 <script src="petnexus-rt.js"></script>
+<!-- Autenticação Firebase → Supabase -->
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+<script src="petnexus-firebase.js"></script>
+<script>window.PETNEXUS_APP_ROLE='cliente';</script>
+<script src="petnexus-auth.js"></script>
 <style>
 :root{
   color-scheme:light;
@@ -972,10 +978,163 @@ button:focus-visible,[onclick]:focus-visible,.tab:focus-visible{outline:2.5px so
   body{padding:14px 0}
   .phone{height:calc(100vh - 28px);min-height:0;border-radius:38px}
 }
+
+/* ===== TELA DE AUTH ===== */
+#authWrap{
+  position:absolute;inset:0;z-index:200;
+  background:var(--bg);
+  display:flex;flex-direction:column;align-items:stretch;overflow-y:auto;
+  overscroll-behavior:none;
+}
+.auth-hero{
+  background:var(--grad-soft);
+  padding:calc(env(safe-area-inset-top)+48px) 24px 36px;
+  text-align:center;position:relative;overflow:hidden;flex:none;
+}
+.auth-hero::before{
+  content:"";position:absolute;top:-80px;left:50%;transform:translateX(-50%);
+  width:280px;height:280px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.18),transparent 70%);pointer-events:none;
+}
+.auth-logo{
+  width:68px;height:68px;border-radius:22px;
+  background:rgba(255,255,255,.20);border:1.5px solid rgba(255,255,255,.28);
+  display:inline-flex;align-items:center;justify-content:center;
+  margin-bottom:14px;backdrop-filter:blur(12px);position:relative;z-index:1;
+}
+.auth-logo .msi{font-size:34px;color:#fff}
+.auth-hero h1{font-size:1.7rem;font-weight:800;color:#fff;letter-spacing:-.03em;position:relative;z-index:1}
+.auth-hero p{font-size:.82rem;color:rgba(255,255,255,.82);margin-top:6px;position:relative;z-index:1;font-weight:500}
+.auth-body{padding:24px 20px calc(env(safe-area-inset-bottom)+24px);flex:1;display:flex;flex-direction:column;gap:16px}
+.auth-tabs{display:flex;background:var(--surface-2);border-radius:14px;padding:4px;gap:4px;flex:none}
+.auth-tab{
+  flex:1;border:none;background:transparent;color:var(--muted);
+  font-family:inherit;font-weight:700;font-size:.88rem;padding:10px;
+  border-radius:10px;cursor:pointer;transition:.2s var(--ease);
+}
+.auth-tab.on{background:var(--surface);color:var(--accent-2);box-shadow:var(--shadow-xs)}
+.auth-form{display:flex;flex-direction:column;gap:12px}
+.auth-form.hidden{display:none}
+.auth-field{display:flex;flex-direction:column;gap:6px}
+.auth-field label{font-size:.74rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.auth-field input{
+  padding:14px 16px;border:1.5px solid var(--border);border-radius:14px;
+  font-size:1rem;font-family:inherit;background:var(--surface);color:var(--text);
+  font-weight:500;transition:border-color .18s;outline:none;
+}
+.auth-field input:focus{border-color:var(--accent)}
+.auth-btn-main{
+  width:100%;padding:15px;border:none;border-radius:16px;
+  background:var(--grad-coral);color:#fff;font-family:inherit;
+  font-weight:800;font-size:1rem;cursor:pointer;
+  box-shadow:0 12px 28px -10px rgba(240,89,31,.5);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:transform .18s var(--spring),opacity .18s;
+}
+.auth-btn-main:active{transform:scale(.97)}
+.auth-btn-main:disabled{opacity:.55;cursor:not-allowed}
+.auth-sep{display:flex;align-items:center;gap:10px;color:var(--faint);font-size:.78rem;font-weight:600}
+.auth-sep::before,.auth-sep::after{content:"";flex:1;height:1px;background:var(--border)}
+.auth-btn-social{
+  width:100%;padding:13px;border:1.5px solid var(--border);border-radius:14px;
+  background:var(--surface);color:var(--text);font-family:inherit;
+  font-weight:700;font-size:.92rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:border-color .18s,background .18s;
+}
+.auth-btn-social:hover{border-color:var(--accent);background:var(--surface-2)}
+.auth-btn-social svg{width:20px;height:20px;flex:none}
+.auth-err{
+  background:color-mix(in srgb,#E5484D 12%,transparent);
+  border:1px solid color-mix(in srgb,#E5484D 30%,transparent);
+  border-radius:12px;padding:11px 14px;font-size:.82rem;font-weight:600;
+  color:#C2363B;display:none;
+}
+[data-theme="dark"] .auth-err{color:#FF6B6E}
+.auth-err.show{display:block}
+.auth-demo{
+  text-align:center;font-size:.78rem;color:var(--faint);font-weight:500;
+  padding-top:4px;
+}
+.auth-demo a{color:var(--accent);text-decoration:none;font-weight:700;cursor:pointer}
+.auth-reset{
+  text-align:center;font-size:.8rem;color:var(--accent);font-weight:600;
+  cursor:pointer;background:none;border:none;font-family:inherit;padding:4px;
+}
 </style>
 </head>
 <body>
 <div class="phone">
+
+<!-- ===== TELA DE AUTH ===== -->
+<div id="authWrap" style="display:flex">
+  <div class="auth-hero">
+    <div class="auth-logo"><span class="msi">pets</span></div>
+    <h1>PetNexus Clube</h1>
+    <p>Seu petshop favorito na palma da mão</p>
+  </div>
+  <div class="auth-body">
+    <div class="auth-tabs" role="tablist">
+      <button class="auth-tab on" id="tabEntrar" role="tab" aria-selected="true" onclick="authTab('entrar')">Entrar</button>
+      <button class="auth-tab" id="tabCadastro" role="tab" aria-selected="false" onclick="authTab('cadastro')">Criar conta</button>
+    </div>
+
+    <!-- FORM: ENTRAR -->
+    <div class="auth-form" id="formEntrar">
+      <div id="authErr" class="auth-err"></div>
+      <div class="auth-field">
+        <label for="loginEmail">E-mail</label>
+        <input id="loginEmail" type="email" inputmode="email" autocomplete="email" placeholder="seu@email.com">
+      </div>
+      <div class="auth-field">
+        <label for="loginSenha">Senha</label>
+        <input id="loginSenha" type="password" autocomplete="current-password" placeholder="••••••••">
+      </div>
+      <button class="auth-btn-main" id="btnEntrar" onclick="doLogin()">
+        <span class="msi">login</span> Entrar
+      </button>
+      <button class="auth-reset" onclick="doReset()">Esqueci minha senha</button>
+      <div class="auth-sep">ou</div>
+      <button class="auth-btn-social" id="btnGoogle" onclick="doGoogle()">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Continuar com Google
+      </button>
+    </div>
+
+    <!-- FORM: CADASTRO -->
+    <div class="auth-form hidden" id="formCadastro">
+      <div id="authErrC" class="auth-err"></div>
+      <div class="auth-field">
+        <label for="cadNome">Nome completo</label>
+        <input id="cadNome" type="text" autocomplete="name" placeholder="Maria da Silva">
+      </div>
+      <div class="auth-field">
+        <label for="cadEmail">E-mail</label>
+        <input id="cadEmail" type="email" inputmode="email" autocomplete="email" placeholder="seu@email.com">
+      </div>
+      <div class="auth-field">
+        <label for="cadSenha">Senha</label>
+        <input id="cadSenha" type="password" autocomplete="new-password" placeholder="Mínimo 6 caracteres">
+      </div>
+      <div class="auth-field">
+        <label for="cadSenha2">Confirmar senha</label>
+        <input id="cadSenha2" type="password" autocomplete="new-password" placeholder="Repita a senha">
+      </div>
+      <button class="auth-btn-main" id="btnCadastrar" onclick="doCadastro()">
+        <span class="msi">person_add</span> Criar minha conta
+      </button>
+      <div class="auth-sep">ou</div>
+      <button class="auth-btn-social" id="btnGoogleC" onclick="doGoogle()">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Continuar com Google
+      </button>
+    </div>
+
+    <div class="auth-demo">Só quer explorar? <a onclick="authDemo()">Continuar em modo demo</a></div>
+  </div>
+</div>
+<!-- ===== /TELA DE AUTH ===== -->
+
   <div class="appbar">
     <div class="top">
       <div><div class="hi">Olá, <span id="hiName">Mariana</span> <span class=msi>waving_hand</span></div><h2 id="hiPet">Como está o Thor?</h2></div>
@@ -2114,6 +2273,148 @@ function renderAll(){
   document.getElementById('stOrders').textContent=state.orders.length;
   renderHero();renderNextAppts();renderReminders();renderPetChips();
 }
+
+/* ============================================================
+   AUTH — tela de login / cadastro
+   ============================================================ */
+const AUTH_DEMO_KEY='petnexus_demo_mode';
+let _authDemoMode=false;
+
+function authErrShow(id,msg){const el=document.getElementById(id);if(el){el.textContent=msg;el.classList.add('show');}}
+function authErrClear(){['authErr','authErrC'].forEach(id=>{const el=document.getElementById(id);if(el){el.textContent='';el.classList.remove('show');}});}
+
+function authTab(tab){
+  const isEntrar=tab==='entrar';
+  document.getElementById('tabEntrar').classList.toggle('on',isEntrar);
+  document.getElementById('tabCadastro').classList.toggle('on',!isEntrar);
+  document.getElementById('tabEntrar').setAttribute('aria-selected',isEntrar);
+  document.getElementById('tabCadastro').setAttribute('aria-selected',!isEntrar);
+  document.getElementById('formEntrar').classList.toggle('hidden',!isEntrar);
+  document.getElementById('formCadastro').classList.toggle('hidden',isEntrar);
+  authErrClear();
+}
+
+function authBusy(busy){
+  ['btnEntrar','btnCadastrar','btnGoogle','btnGoogleC'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.disabled=busy;
+  });
+}
+
+function authFirebaseErr(e){
+  const map={
+    'auth/invalid-email':'E-mail inválido.',
+    'auth/user-not-found':'Usuário não encontrado.',
+    'auth/wrong-password':'Senha incorreta.',
+    'auth/email-already-in-use':'E-mail já cadastrado. Tente entrar.',
+    'auth/weak-password':'Senha fraca — use ao menos 6 caracteres.',
+    'auth/too-many-requests':'Muitas tentativas. Aguarde alguns minutos.',
+    'auth/network-request-failed':'Sem conexão. Verifique sua internet.',
+    'auth/invalid-credential':'E-mail ou senha incorretos.',
+    'auth/popup-closed-by-user':'Login cancelado.',
+    'auth/cancelled-popup-request':'Login cancelado.',
+  };
+  return map[e&&e.code]||'Erro inesperado. Tente novamente.';
+}
+
+async function doLogin(){
+  const A=window.PetNexusAuth;
+  if(!A||!A.available()){authErrShow('authErr','Firebase não configurado. Use o modo demo.');return;}
+  authErrClear();
+  const email=document.getElementById('loginEmail').value.trim();
+  const senha=document.getElementById('loginSenha').value;
+  if(!email||!senha){authErrShow('authErr','Preencha e-mail e senha.');return;}
+  authBusy(true);
+  try{await A.login(email,senha);}
+  catch(e){authBusy(false);authErrShow('authErr',authFirebaseErr(e));}
+}
+
+async function doCadastro(){
+  const A=window.PetNexusAuth;
+  if(!A||!A.available()){authErrShow('authErrC','Firebase não configurado. Use o modo demo.');return;}
+  authErrClear();
+  const nome=document.getElementById('cadNome').value.trim();
+  const email=document.getElementById('cadEmail').value.trim();
+  const senha=document.getElementById('cadSenha').value;
+  const senha2=document.getElementById('cadSenha2').value;
+  if(!nome){authErrShow('authErrC','Informe seu nome.');return;}
+  if(!email){authErrShow('authErrC','Informe seu e-mail.');return;}
+  if(senha.length<6){authErrShow('authErrC','Senha fraca — use ao menos 6 caracteres.');return;}
+  if(senha!==senha2){authErrShow('authErrC','As senhas não coincidem.');return;}
+  authBusy(true);
+  try{
+    await A.signup(email,senha,{nome});
+    // Pré-preenche o perfil com o nome cadastrado
+    state.profile.name=nome;state.profile.first=nome.split(' ')[0];save();
+  }
+  catch(e){authBusy(false);authErrShow('authErrC',authFirebaseErr(e));}
+}
+
+async function doGoogle(){
+  const A=window.PetNexusAuth;
+  if(!A||!A.available()){authErrShow('authErr','Firebase não configurado. Use o modo demo.');return;}
+  authErrClear();authBusy(true);
+  try{await A.loginGoogle();}
+  catch(e){authBusy(false);authErrShow('authErr',authFirebaseErr(e));}
+}
+
+async function doReset(){
+  const A=window.PetNexusAuth;
+  if(!A||!A.available()){toast('Firebase não configurado.');return;}
+  const email=document.getElementById('loginEmail').value.trim();
+  if(!email){authErrShow('authErr','Informe o e-mail para recuperar a senha.');return;}
+  try{await A.resetByEmail(email);toast('<span class=msi>mail</span> E-mail de redefinição enviado!');}
+  catch(e){authErrShow('authErr',authFirebaseErr(e));}
+}
+
+function authDemo(){
+  _authDemoMode=true;
+  try{localStorage.setItem(AUTH_DEMO_KEY,'1');}catch(_){}
+  showApp();
+  toast('<span class=msi>science</span> Modo demo ativado — dados locais');
+}
+
+function showApp(){
+  const w=document.getElementById('authWrap');
+  if(w){w.style.opacity='0';w.style.transition='opacity .28s ease';setTimeout(()=>{w.style.display='none';w.style.opacity='';w.style.transition='';},280);}
+}
+function showAuth(){
+  const w=document.getElementById('authWrap');
+  if(w){w.style.display='flex';w.style.opacity='1';}
+  authErrClear();authBusy(false);
+}
+
+// Conecta ao estado de autenticação Firebase
+;(function wireAuth(){
+  const A=window.PetNexusAuth;
+  if(!A||!A.available()){
+    // Firebase não configurado — verifica se estava em demo mode
+    let demo=false;try{demo=localStorage.getItem(AUTH_DEMO_KEY)==='1';}catch(_){}
+    if(demo){_authDemoMode=true;showApp();}else{showAuth();}
+    return;
+  }
+  // Aguarda o estado inicial do Firebase (já disparado pelo petnexus-auth.js)
+  A.onUser(function(user){
+    if(user){
+      // Se tiver nome do Firebase, atualiza o perfil local
+      if(user.displayName&&!state.profile._fromAuth){
+        state.profile.name=user.displayName;
+        state.profile.first=user.displayName.split(' ')[0];
+        state.profile._fromAuth=true;save();
+      }
+      showApp();
+    }else{
+      // Verifica demo mode
+      let demo=false;try{demo=localStorage.getItem(AUTH_DEMO_KEY)==='1';}catch(_){}
+      if(demo){_authDemoMode=true;showApp();}else{showAuth();}
+    }
+  });
+})();
+
+// Enter key nos campos de auth
+;['loginEmail','loginSenha'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});});
+;['cadSenha2','cadEmail','cadNome','cadSenha'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('keydown',e=>{if(e.key==='Enter')doCadastro();});});
+;['crmEmail','crmSenha'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('keydown',e=>{if(e.key==='Enter')crmDoLogin?.();});});
+;['entEmail','entSenha'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('keydown',e=>{if(e.key==='Enter')entDoLogin?.();});});
 
 /* ============ BOOT ============ */
 initState();
