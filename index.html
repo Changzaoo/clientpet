@@ -57,56 +57,41 @@
 html{-webkit-text-size-adjust:100%}
 body{
   font-family:'Inter',-apple-system,system-ui,'Segoe UI',sans-serif;
-  background:
-    radial-gradient(1200px 600px at 50% -10%, rgba(14,124,134,.10), transparent 60%),
-    var(--page);
+  background:var(--page);
   color:var(--text);
-  display:flex;justify-content:center;min-height:100vh;min-height:100dvh;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
   transition:background .4s ease;
-  overflow-x:hidden;
+  overflow:hidden;
 }
-/* MOBILE REAL: trava na viewport, sem scroll do documento (rolagem é interna no .scroll) */
-@media(max-width:479.98px){
-  html,body{height:100%;height:100dvh;overflow:hidden;overscroll-behavior:none;position:fixed;inset:0;width:100%}
-}
-[data-theme="dark"] body{background:radial-gradient(1200px 600px at 50% -10%, rgba(14,124,134,.18), transparent 60%),var(--page)}
+html,body{height:100%;height:100dvh;overscroll-behavior:none;position:fixed;inset:0;width:100%}
+[data-theme="dark"] body{background:var(--page)}
 h1,h2,h3,h4{letter-spacing:-.025em;font-weight:700;line-height:1.16}
 
-/* ===== MOLDURA iPhone ===== */
+/* ===== APP CONTAINER ===== */
 .phone{
-  width:100%;max-width:402px;background:var(--bg);
-  height:100vh;height:100dvh;
+  width:100%;max-width:480px;margin:0 auto;
+  background:var(--bg);
+  height:100%;height:100dvh;
   position:relative;display:flex;flex-direction:column;
   transition:background .4s ease;overflow:hidden;
-}
-@media(min-width:480px){
-  body{align-items:flex-start;padding:28px 0}
-  .phone{
-    margin:0;min-height:auto;height:calc(100vh - 56px);max-height:880px;min-height:560px;
-    border-radius:46px;overflow:hidden;
-    box-shadow:0 0 0 11px #1b1b1f, 0 0 0 13px #2c2c2e,
-               0 60px 120px -34px rgba(0,0,0,.62),
-               0 30px 60px -40px rgba(0,0,0,.5);
-  }
-  .phone::before{
-    content:"";position:absolute;top:11px;left:50%;transform:translateX(-50%);
-    width:108px;height:31px;background:#000;border-radius:22px;z-index:90;pointer-events:none;
-  }
 }
 
 /* ===== APPBAR ===== */
 .appbar{
   background:var(--grad-soft);color:#fff;
-  padding:calc(env(safe-area-inset-top) + 26px) 18px 26px;
-  border-radius:0 0 32px 32px;position:relative;z-index:20;overflow:hidden;
-  box-shadow:0 18px 44px -22px rgba(11,126,138,.75);
+  padding:calc(env(safe-area-inset-top) + 20px) 20px 24px;
+  position:relative;z-index:20;overflow:hidden;
+  box-shadow:0 12px 40px -16px rgba(11,126,138,.6);
+  flex:none;
+}
+.appbar::before{
+  content:"";position:absolute;top:-80px;left:-40px;width:260px;height:260px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.14),transparent 65%);pointer-events:none;
 }
 .appbar::after{
-  content:"";position:absolute;top:-60px;right:-50px;width:200px;height:200px;border-radius:50%;
-  background:radial-gradient(circle,rgba(255,255,255,.22),transparent 70%);pointer-events:none;
+  content:"";position:absolute;bottom:-60px;right:-40px;width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.10),transparent 65%);pointer-events:none;
 }
-@media(min-width:480px){.appbar{padding-top:48px}}
 .appbar .top{display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative;z-index:1}
 .appbar .hi{font-size:.82rem;opacity:.94;font-weight:500;display:flex;align-items:center;gap:5px;letter-spacing:-.01em}
 .appbar .hi .msi{font-size:17px;color:#FFE08A}
@@ -444,20 +429,25 @@ h1,h2,h3,h4{letter-spacing:-.025em;font-weight:700;line-height:1.16}
 .tabbar{
   position:absolute;bottom:0;left:0;right:0;
   background:var(--glass);
-  backdrop-filter:blur(26px) saturate(1.8);-webkit-backdrop-filter:blur(26px) saturate(1.8);
-  display:flex;justify-content:space-around;
-  padding:9px 6px calc(env(safe-area-inset-bottom) + 12px);
+  backdrop-filter:blur(32px) saturate(2);-webkit-backdrop-filter:blur(32px) saturate(2);
+  display:flex;justify-content:space-around;align-items:center;
+  padding:6px 4px calc(env(safe-area-inset-bottom) + 6px);
   border-top:1px solid var(--hair);z-index:25;
 }
 .tab{
-  flex:1;text-align:center;color:var(--faint);cursor:pointer;padding:6px 4px;position:relative;
-  min-height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
-  transition:color .2s;
+  flex:1;text-align:center;color:var(--faint);cursor:pointer;position:relative;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  transition:color .2s;padding:4px 2px;
 }
-.tab .e .msi{font-size:24px;transition:transform .3s cubic-bezier(.2,1.5,.5,1)}
-.tab span{display:block;font-size:.66rem;font-weight:700;letter-spacing:-.01em}
+.tab .e{
+  width:48px;height:32px;display:flex;align-items:center;justify-content:center;
+  border-radius:14px;transition:background .22s var(--ease),transform .2s var(--spring);
+}
+.tab .e .msi{font-size:24px;transition:transform .3s cubic-bezier(.2,1.5,.5,1),font-variation-settings .2s}
+.tab span{display:block;font-size:.64rem;font-weight:700;letter-spacing:-.01em;transition:color .2s}
 .tab.on{color:var(--accent-2)}
-.tab.on .e .msi{transform:translateY(-1px) scale(1.08);font-variation-settings:'FILL' 1,'wght' 600}
+.tab.on .e{background:color-mix(in srgb,var(--accent-2) 14%,transparent)}
+.tab.on .e .msi{transform:scale(1.1);font-variation-settings:'FILL' 1,'wght' 600}
 .badge{
   position:absolute;top:0;right:50%;transform:translateX(20px);
   background:var(--grad-coral);color:#fff;font-size:.62rem;font-weight:800;
@@ -973,11 +963,6 @@ button:focus-visible,[onclick]:focus-visible,.tab:focus-visible{outline:2.5px so
       var(--page);
   }
 }
-/* Em telas muito baixas (desktop), a moldura encolhe sem estourar */
-@media(min-width:480px) and (max-height:620px){
-  body{padding:14px 0}
-  .phone{height:calc(100vh - 28px);min-height:0;border-radius:38px}
-}
 
 /* ===== TELA DE AUTH ===== */
 #authWrap{
@@ -988,7 +973,7 @@ button:focus-visible,[onclick]:focus-visible,.tab:focus-visible{outline:2.5px so
 }
 .auth-hero{
   background:var(--grad-soft);
-  padding:calc(env(safe-area-inset-top)+48px) 24px 36px;
+  padding:calc(env(safe-area-inset-top)+56px) 24px 40px;
   text-align:center;position:relative;overflow:hidden;flex:none;
 }
 .auth-hero::before{
